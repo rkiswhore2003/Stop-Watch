@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .con {
+            text-align: center;
+            background-color: #34495E;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        #time {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        #list button {
+            font-size: 16px;
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(247, 6, 6, 0.897);
+            color: white;
+            cursor: pointer;
+        }
+
+        #list button:hover {
+            opacity: 0.7;
+        }
+
+        #laps {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="con">
+        <div id="time">00:00:00</div>
+        <div id="list">
+            <button id="start">Start</button>
+            <button id="lap">Lap</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div id="laps"></div>
+    </div>
+    <script>
+        let t;
+        let e = 0;
+        let r = false;
+        let l = 0;
+
+        document.getElementById('start').addEventListener('click', () => {
+            if (!r) {
+                r = true;
+                t = setInterval(() => {
+                    e++;
+                    document.getElementById('time').textContent = formatTime(e);
+                }, 1000);
+            }
+        });
+
+        document.getElementById('lap').addEventListener('click', () => {
+            if (r) {
+                l++;
+                const lT = formatTime(e);
+                const lE = document.createElement('div');
+                lE.textContent = `Lap ${l}: ${lT}`;
+                document.getElementById('laps').appendChild(lE);
+            }
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            if (r) {
+                r = false;
+                clearInterval(t);
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            r = false;
+            clearInterval(t);
+            e = 0;
+            l = 0;
+            document.getElementById('time').textContent = '00:00:00';
+            document.getElementById('laps').innerHTML = '';
+        });
+
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+    </script>
+</body>
+
+</html>
